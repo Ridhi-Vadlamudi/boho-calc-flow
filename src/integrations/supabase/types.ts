@@ -47,6 +47,127 @@ export type Database = {
         }
         Relationships: []
       }
+      calculator_ratings: {
+        Row: {
+          calculator_id: string
+          created_at: string
+          id: string
+          rating: number
+          review: string | null
+          user_id: string
+        }
+        Insert: {
+          calculator_id: string
+          created_at?: string
+          id?: string
+          rating: number
+          review?: string | null
+          user_id: string
+        }
+        Update: {
+          calculator_id?: string
+          created_at?: string
+          id?: string
+          rating?: number
+          review?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calculator_ratings_calculator_id_fkey"
+            columns: ["calculator_id"]
+            isOneToOne: false
+            referencedRelation: "calculators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      calculator_usage: {
+        Row: {
+          calculator_id: string
+          created_at: string
+          id: string
+          inputs: Json
+          result: string
+          user_id: string | null
+        }
+        Insert: {
+          calculator_id: string
+          created_at?: string
+          id?: string
+          inputs: Json
+          result: string
+          user_id?: string | null
+        }
+        Update: {
+          calculator_id?: string
+          created_at?: string
+          id?: string
+          inputs?: Json
+          result?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calculator_usage_calculator_id_fkey"
+            columns: ["calculator_id"]
+            isOneToOne: false
+            referencedRelation: "calculators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      calculators: {
+        Row: {
+          category: string | null
+          created_at: string
+          creator_id: string | null
+          description: string | null
+          formula: string
+          id: string
+          is_anonymous: boolean
+          is_public: boolean
+          name: string
+          rating_avg: number | null
+          rating_count: number
+          updated_at: string
+          usage_count: number
+          variables: Json
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          creator_id?: string | null
+          description?: string | null
+          formula: string
+          id?: string
+          is_anonymous?: boolean
+          is_public?: boolean
+          name: string
+          rating_avg?: number | null
+          rating_count?: number
+          updated_at?: string
+          usage_count?: number
+          variables?: Json
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          creator_id?: string | null
+          description?: string | null
+          formula?: string
+          id?: string
+          is_anonymous?: boolean
+          is_public?: boolean
+          name?: string
+          rating_avg?: number | null
+          rating_count?: number
+          updated_at?: string
+          usage_count?: number
+          variables?: Json
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
