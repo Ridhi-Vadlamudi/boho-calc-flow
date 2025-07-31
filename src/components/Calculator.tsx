@@ -3,7 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Save } from 'lucide-react';
 
-export const Calculator = () => {
+interface CalculatorProps {
+  onSaveCalculation?: (expression: string, result: string) => void;
+}
+
+export const Calculator = ({ onSaveCalculation }: CalculatorProps) => {
   const [display, setDisplay] = useState('0');
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
@@ -86,10 +90,8 @@ export const Calculator = () => {
   };
 
   const saveCurrentCalculation = () => {
-    if (lastExpression && display !== '0') {
-      if (typeof window !== 'undefined' && (window as any).triggerSaveCalculation) {
-        (window as any).triggerSaveCalculation(lastExpression, display);
-      }
+    if (lastExpression && display !== '0' && onSaveCalculation) {
+      onSaveCalculation(lastExpression, display);
     }
   };
 

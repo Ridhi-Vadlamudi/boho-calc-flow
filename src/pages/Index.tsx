@@ -11,12 +11,21 @@ const Index = () => {
   const { user, signOut, loading } = useAuth();
   const [selectedCalculator, setSelectedCalculator] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<'calculator' | 'marketplace' | 'history'>('calculator');
+  const [saveRequest, setSaveRequest] = useState<{ expression: string; result: string } | null>(null);
 
   // Debug logging
   useEffect(() => {
     console.log('Active tab:', activeTab);
     console.log('Selected calculator:', selectedCalculator);
   }, [activeTab, selectedCalculator]);
+
+  // Handle save calculation request
+  const handleSaveCalculation = (expression: string, result: string) => {
+    setSaveRequest({ expression, result });
+    setActiveTab('history'); // Switch to history tab to show save dialog
+    // Clear the save request after a short delay to prevent re-triggering
+    setTimeout(() => setSaveRequest(null), 1000);
+  };
 
   if (loading) {
     return (
@@ -132,7 +141,7 @@ const Index = () => {
                   <p className="text-muted-foreground text-sm">Perform simple calculations</p>
                 </div>
                 <div className="bg-white/50 p-4 rounded-xl border">
-                  <Calculator />
+                  <Calculator onSaveCalculation={handleSaveCalculation} />
                 </div>
               </div>
             )}
@@ -149,7 +158,10 @@ const Index = () => {
                   <h2 className="text-2xl font-semibold text-foreground mb-2">Calculation History</h2>
                   <p className="text-muted-foreground text-sm">Track and organize your calculations</p>
                 </div>
-                <CalculatorHistory onCalculationSave={() => {}} />
+                <CalculatorHistory 
+                  onCalculationSave={() => {}} 
+                  triggerSave={saveRequest}
+                />
               </div>
             )}
           </>

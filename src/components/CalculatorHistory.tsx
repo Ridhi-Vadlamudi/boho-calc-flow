@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { supabase } from '@/integrations/supabase/client';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { Save, Download, Hash, StickyNote, Clock, Trash2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { Save, Download, Hash, StickyNote, Clock, Trash2, Edit3, Plus } from 'lucide-react';
 
 interface CalculationHistory {
   id: string;
@@ -22,17 +22,118 @@ interface CalculationHistory {
   created_at: string;
 }
 
-interface CalculatorHistoryProps {
-  onCalculationSave: (expression: string, result: string) => void;
+interface SaveCalculationDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  calculation: { expression: string; result: string } | null;
+  onSave: (tags: string[], notes: string) => void;
 }
 
-export const CalculatorHistory = ({ onCalculationSave }: CalculatorHistoryProps) => {
+const SaveCalculationDialog = ({ isOpen, onClose, calculation, onSave }: SaveCalculationDialogProps) => {
+  const [tags, setTags] = useState('');
+  const [notes, setNotes] = useState('');
+  const [context, setContext] = useState('');
+
+  const handleSave = () => {
+    const tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+    const fullNotes = [notes, context].filter(n => n.trim()).join('\n\nContext: ');
+    onSave(tagsArray, fullNotes);
+    setTags('');
+    setNotes('');
+    setContext('');
+    onClose();
+  };
+
+  const handleClose = () => {
+    setTags('');
+    setNotes('');
+    setContext('');
+    onClose();
+  };
+
+  if (!calculation) return null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Save className="w-5 h-5" />
+            Save Calculation
+          </DialogTitle>
+        </DialogHeader>
+        
+        <div className="space-y-4">
+          <div className="bg-muted p-3 rounded-lg">
+            <p className="font-mono text-sm">
+              <span>{calculation.expression}</span>
+              <span className="mx-2 text-primary">=</span>
+              <span className="font-semibold text-primary">{calculation.result}</span>
+            </p>
+          </div>
+          
+          <div>
+            <Label htmlFor="tags">Tags (comma-separated)</Label>
+            <Input
+              id="tags"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              placeholder="e.g., work, taxes, budget"
+              className="mt-1"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="notes">Notes</Label>
+            <Textarea
+              id="notes"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Add any notes about this calculation..."
+              className="mt-1"
+              rows={3}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="context">Context (What was this calculation for?)</Label>
+            <Textarea
+              id="context"
+              value={context}
+              onChange={(e) => setContext(e.target.value)}
+              placeholder="e.g., Planning monthly budget, calculating tip for dinner, figuring out loan payments..."
+              className="mt-1"
+              rows={2}
+            />
+          </div>
+          
+          <Separator />
+          
+          <div className="flex gap-2 justify-end">
+            <Button variant="outline" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button onClick={handleSave} className="flex items-center gap-2">
+              <Save className="w-4 h-4" />
+              Save
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+interface CalculatorHistoryProps {
+  onCalculationSave: (expression: string, result: string) => void;
+  triggerSave?: { expression: string; result: string } | null;
+}
+
+export const CalculatorHistory = ({ onCalculationSave, triggerSave }: CalculatorHistoryProps) => {
   const [history, setHistory] = useState<CalculationHistory[]>([]);
   const [loading, setLoading] = useState(true);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [currentCalculation, setCurrentCalculation] = useState<{ expression: string; result: string } | null>(null);
-  const [tags, setTags] = useState('');
-  const [notes, setNotes] = useState('');
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -42,11 +143,13 @@ export const CalculatorHistory = ({ onCalculationSave }: CalculatorHistoryProps)
     }
   }, [user]);
 
+  // Handle external save requests
   useEffect(() => {
-    if (currentCalculation) {
+    if (triggerSave) {
+      setCurrentCalculation(triggerSave);
       setSaveDialogOpen(true);
     }
-  }, [currentCalculation]);
+  }, [triggerSave]);
 
   const fetchHistory = async () => {
     try {
@@ -70,33 +173,28 @@ export const CalculatorHistory = ({ onCalculationSave }: CalculatorHistoryProps)
     }
   };
 
-  const saveCalculation = async () => {
+  const saveCalculation = async (tags: string[], notes: string) => {
     if (!currentCalculation || !user) return;
 
     try {
-      const tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-      
       const { error } = await supabase
         .from('calculation_history')
         .insert({
           user_id: user.id,
           expression: currentCalculation.expression,
           result: currentCalculation.result,
-          tags: tagsArray,
+          tags: tags,
           notes: notes.trim() || null
         });
 
       if (error) throw error;
 
       toast({
-        title: "Success",
+        title: "Success!",
         description: "Calculation saved to history"
       });
 
-      setSaveDialogOpen(false);
       setCurrentCalculation(null);
-      setTags('');
-      setNotes('');
       fetchHistory();
     } catch (error) {
       console.error('Error saving calculation:', error);
@@ -143,7 +241,7 @@ export const CalculatorHistory = ({ onCalculationSave }: CalculatorHistoryProps)
         calc.notes || '',
         new Date(calc.created_at).toLocaleString()
       ])
-    ].map(row => row.map(field => `"${field}"`).join(',')).join('\\n');
+    ].map(row => row.map(field => `"${field}"`).join(',')).join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -159,13 +257,6 @@ export const CalculatorHistory = ({ onCalculationSave }: CalculatorHistoryProps)
     });
   };
 
-  // This function will be called from the Calculator component
-  useEffect(() => {
-    (window as any).triggerSaveCalculation = (expression: string, result: string) => {
-      setCurrentCalculation({ expression, result });
-    };
-  }, []);
-
   if (loading) {
     return (
       <Card className="w-full">
@@ -180,7 +271,7 @@ export const CalculatorHistory = ({ onCalculationSave }: CalculatorHistoryProps)
 
   return (
     <>
-      <Card className="w-full shadow-[var(--shadow-warm)]">
+      <Card className="w-full shadow-lg">
         <CardHeader className="pb-4">
           <div className="flex justify-between items-center">
             <CardTitle className="text-xl font-semibold flex items-center gap-2">
@@ -212,12 +303,12 @@ export const CalculatorHistory = ({ onCalculationSave }: CalculatorHistoryProps)
                 {history.map((calc) => (
                   <div 
                     key={calc.id} 
-                    className="group bg-gradient-to-r from-card to-muted p-4 rounded-lg border border-border/50 hover:shadow-[var(--shadow-soft)] transition-all duration-300"
+                    className="group bg-white/80 backdrop-blur-sm p-4 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="font-mono text-sm">
-                          <span className="text-muted-foreground">{calc.expression}</span>
+                          <span className="text-gray-600">{calc.expression}</span>
                           <span className="mx-2 text-primary">=</span>
                           <span className="font-semibold text-primary">{calc.result}</span>
                         </div>
@@ -234,12 +325,12 @@ export const CalculatorHistory = ({ onCalculationSave }: CalculatorHistoryProps)
                         )}
                         
                         {calc.notes && (
-                          <p className="text-sm text-muted-foreground mt-2 italic">
-                            "{calc.notes}"
-                          </p>
+                          <div className="text-sm text-gray-600 mt-2 p-2 bg-gray-50 rounded border-l-4 border-primary/30">
+                            <div className="whitespace-pre-wrap">{calc.notes}</div>
+                          </div>
                         )}
                         
-                        <p className="text-xs text-muted-foreground mt-2">
+                        <p className="text-xs text-gray-500 mt-2">
                           {new Date(calc.created_at).toLocaleString()}
                         </p>
                       </div>
@@ -261,71 +352,12 @@ export const CalculatorHistory = ({ onCalculationSave }: CalculatorHistoryProps)
         </CardContent>
       </Card>
 
-      <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Save className="w-5 h-5" />
-              Save Calculation
-            </DialogTitle>
-          </DialogHeader>
-          
-          {currentCalculation && (
-            <div className="space-y-4">
-              <div className="bg-muted p-3 rounded-lg">
-                <p className="font-mono text-sm">
-                  <span>{currentCalculation.expression}</span>
-                  <span className="mx-2 text-primary">=</span>
-                  <span className="font-semibold text-primary">{currentCalculation.result}</span>
-                </p>
-              </div>
-              
-              <div>
-                <Label htmlFor="tags">Tags (comma-separated)</Label>
-                <Input
-                  id="tags"
-                  value={tags}
-                  onChange={(e) => setTags(e.target.value)}
-                  placeholder="e.g., work, taxes, budget"
-                  className="mt-1"
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor="notes">Notes</Label>
-                <Textarea
-                  id="notes"
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Add any notes about this calculation..."
-                  className="mt-1"
-                  rows={3}
-                />
-              </div>
-              
-              <Separator />
-              
-              <div className="flex gap-2 justify-end">
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    setSaveDialogOpen(false);
-                    setCurrentCalculation(null);
-                    setTags('');
-                    setNotes('');
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button onClick={saveCalculation} className="flex items-center gap-2">
-                  <Save className="w-4 h-4" />
-                  Save
-                </Button>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <SaveCalculationDialog
+        isOpen={saveDialogOpen}
+        onClose={() => setSaveDialogOpen(false)}
+        calculation={currentCalculation}
+        onSave={saveCalculation}
+      />
     </>
   );
 };
