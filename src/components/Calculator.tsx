@@ -120,11 +120,11 @@ export const Calculator = () => {
 
   return (
     <div className="space-y-4">
-      <Card className="w-full max-w-sm mx-auto shadow-[var(--shadow-warm)] bg-gradient-to-br from-card to-background">
+      <Card className="w-full max-w-sm mx-auto shadow-lg bg-white border-2">
         <CardContent className="p-6 space-y-4">
           {/* Display */}
-          <div className="bg-gradient-to-r from-muted to-muted/80 rounded-xl p-4 min-h-[80px] flex items-center justify-end border border-border/30">
-            <span className="text-2xl font-mono font-bold text-right break-all text-foreground">
+          <div className="bg-gray-100 rounded-xl p-4 min-h-[80px] flex items-center justify-end border">
+            <span className="text-2xl font-mono font-bold text-right break-all text-gray-900">
               {display}
             </span>
           </div>

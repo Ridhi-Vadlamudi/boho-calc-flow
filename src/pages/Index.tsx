@@ -5,12 +5,18 @@ import { Calculator } from '@/components/Calculator';
 import { CalculatorHistory } from '@/components/CalculatorHistory';
 import { CalculatorMarketplace } from '@/components/CalculatorMarketplace';
 import { CalculatorRunner } from '@/components/CalculatorRunner';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Index = () => {
   const { user, signOut, loading } = useAuth();
   const [selectedCalculator, setSelectedCalculator] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<'calculator' | 'marketplace' | 'history'>('calculator');
+
+  // Debug logging
+  useEffect(() => {
+    console.log('Active tab:', activeTab);
+    console.log('Selected calculator:', selectedCalculator);
+  }, [activeTab, selectedCalculator]);
 
   if (loading) {
     return (
@@ -125,7 +131,9 @@ const Index = () => {
                   <h2 className="text-2xl font-semibold text-foreground mb-2">Basic Calculator</h2>
                   <p className="text-muted-foreground text-sm">Perform simple calculations</p>
                 </div>
-                <Calculator />
+                <div className="bg-white/50 p-4 rounded-xl border">
+                  <Calculator />
+                </div>
               </div>
             )}
 
