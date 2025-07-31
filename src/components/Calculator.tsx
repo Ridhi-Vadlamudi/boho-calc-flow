@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Save } from 'lucide-react';
 
 export const Calculator = () => {
   const [display, setDisplay] = useState('0');
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(false);
+  const [lastExpression, setLastExpression] = useState('');
 
   const inputNumber = (num: string) => {
     if (waitingForOperand) {
@@ -56,7 +58,10 @@ export const Calculator = () => {
 
     if (previousValue !== null && operation) {
       const newValue = performCalculation(previousValue, inputValue, operation);
+      const expression = `${previousValue} ${operation} ${inputValue}`;
+      
       setDisplay(String(newValue));
+      setLastExpression(expression);
       setPreviousValue(null);
       setOperation(null);
       setWaitingForOperand(true);
@@ -68,6 +73,7 @@ export const Calculator = () => {
     setPreviousValue(null);
     setOperation(null);
     setWaitingForOperand(false);
+    setLastExpression('');
   };
 
   const inputDecimal = () => {
@@ -76,6 +82,14 @@ export const Calculator = () => {
       setWaitingForOperand(false);
     } else if (display.indexOf('.') === -1) {
       setDisplay(display + '.');
+    }
+  };
+
+  const saveCurrentCalculation = () => {
+    if (lastExpression && display !== '0') {
+      if (typeof window !== 'undefined' && (window as any).triggerSaveCalculation) {
+        (window as any).triggerSaveCalculation(lastExpression, display);
+      }
     }
   };
 
@@ -105,28 +119,44 @@ export const Calculator = () => {
   ];
 
   return (
-    <Card className="w-full max-w-sm mx-auto shadow-lg">
-      <CardContent className="p-6 space-y-4">
-        {/* Display */}
-        <div className="bg-muted rounded-lg p-4 min-h-[80px] flex items-center justify-end">
-          <span className="text-2xl font-mono font-bold text-right break-all">
-            {display}
-          </span>
-        </div>
+    <div className="space-y-4">
+      <Card className="w-full max-w-sm mx-auto shadow-[var(--shadow-warm)] bg-gradient-to-br from-card to-background">
+        <CardContent className="p-6 space-y-4">
+          {/* Display */}
+          <div className="bg-gradient-to-r from-muted to-muted/80 rounded-xl p-4 min-h-[80px] flex items-center justify-end border border-border/30">
+            <span className="text-2xl font-mono font-bold text-right break-all text-foreground">
+              {display}
+            </span>
+          </div>
 
-        {/* Button Grid */}
-        <div className="grid grid-cols-4 gap-3">
-          {buttons.map((button, index) => (
-            <Button
-              key={index}
-              onClick={button.action}
-              className={`h-12 text-lg font-semibold transition-all duration-200 ${button.className}`}
-            >
-              {button.label}
-            </Button>
-          ))}
+          {/* Button Grid */}
+          <div className="grid grid-cols-4 gap-3">
+            {buttons.map((button, index) => (
+              <Button
+                key={index}
+                onClick={button.action}
+                className={`h-12 text-lg font-semibold transition-all duration-300 hover:scale-105 ${button.className}`}
+              >
+                {button.label}
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+      
+      {/* Save Button */}
+      {lastExpression && (
+        <div className="flex justify-center">
+          <Button 
+            onClick={saveCurrentCalculation}
+            variant="outline"
+            className="flex items-center gap-2 bg-gradient-to-r from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-primary/30"
+          >
+            <Save className="w-4 h-4" />
+            Save Calculation
+          </Button>
         </div>
-      </CardContent>
-    </Card>
+      )}
+    </div>
   );
 };
