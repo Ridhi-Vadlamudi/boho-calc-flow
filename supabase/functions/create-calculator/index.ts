@@ -72,6 +72,29 @@ Example for compound interest:
     });
 
     const data = await response.json();
+    
+    if (!response.ok) {
+      console.error('OpenAI API error:', data);
+      return new Response(JSON.stringify({ 
+        error: 'OpenAI API request failed',
+        details: data.error?.message || 'Unknown error'
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error('Unexpected OpenAI response structure:', data);
+      return new Response(JSON.stringify({ 
+        error: 'Invalid response from OpenAI API',
+        details: 'Response missing expected choices structure'
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     const generatedContent = data.choices[0].message.content;
 
     // Try to extract JSON from the response
