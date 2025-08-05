@@ -129,14 +129,27 @@ export const CalculatorMarketplace = ({ onSelectCalculator }: MarketplaceProps) 
         body: { prompt: aiPrompt, userInput }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw error;
+      }
+
+      if (data?.error) {
+        console.error('AI creation error:', data.error, data.details);
+        throw new Error(data.error + (data.details ? `: ${data.details}` : ''));
+      }
+
+      if (!data?.success || !data?.calculatorData) {
+        console.error('Invalid response format:', data);
+        throw new Error('Invalid response from AI service');
+      }
 
       const calculatorData = data.calculatorData;
       setNewCalculator({
         name: calculatorData.name,
         description: calculatorData.description,
         formula: calculatorData.formula,
-        variables: calculatorData.variables,
+        variables: calculatorData.variables || [],
         category: calculatorData.category,
         is_public: true,
         is_anonymous: false

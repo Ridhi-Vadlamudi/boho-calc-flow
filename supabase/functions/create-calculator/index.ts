@@ -140,7 +140,10 @@ Example for compound interest:
       });
     }
 
-    return new Response(JSON.stringify({ calculatorData }), {
+    return new Response(JSON.stringify({ 
+      success: true,
+      calculatorData 
+    }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
