@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Save } from 'lucide-react';
+import { Save, Leaf, Flower } from 'lucide-react';
 
 interface CalculatorProps {
   onSaveCalculation?: (expression: string, result: string) => void;
@@ -122,11 +122,22 @@ export const Calculator = ({ onSaveCalculation }: CalculatorProps) => {
 
   return (
     <div className="space-y-4">
-      <Card className="w-full max-w-sm mx-auto shadow-lg bg-white border-2">
+      <Card className="w-full max-w-sm mx-auto shadow-lg bg-white/90 backdrop-blur-sm border-2 border-green-200/50 relative overflow-hidden">
+        {/* Decorative corner elements */}
+        <div className="absolute top-2 left-2">
+          <Leaf className="w-4 h-4 text-green-300 opacity-60" />
+        </div>
+        <div className="absolute top-2 right-2">
+          <Flower className="w-4 h-4 text-orange-300 opacity-60" />
+        </div>
+        
         <CardContent className="p-6 space-y-4">
           {/* Display */}
-          <div className="bg-gray-100 rounded-xl p-4 min-h-[80px] flex items-center justify-end border">
-            <span className="text-2xl font-mono font-bold text-right break-all text-gray-900">
+          <div className="bg-gradient-to-r from-green-50 to-orange-50 rounded-xl p-4 min-h-[80px] flex items-center justify-end border border-green-200/30 relative">
+            <div className="absolute top-1 right-1">
+              <Leaf className="w-3 h-3 text-green-400 opacity-40" />
+            </div>
+            <span className="text-2xl font-mono font-bold text-right break-all text-gray-800">
               {display}
             </span>
           </div>
@@ -152,10 +163,11 @@ export const Calculator = ({ onSaveCalculation }: CalculatorProps) => {
           <Button 
             onClick={saveCurrentCalculation}
             variant="outline"
-            className="flex items-center gap-2 bg-gradient-to-r from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border-primary/30"
+            className="flex items-center gap-2 bg-gradient-to-r from-green-100/80 to-orange-100/80 hover:from-green-200/80 hover:to-orange-200/80 border-green-300/50 backdrop-blur-sm"
           >
             <Save className="w-4 h-4" />
             Save Calculation
+            <Flower className="w-4 h-4 text-orange-400" />
           </Button>
         </div>
       )}

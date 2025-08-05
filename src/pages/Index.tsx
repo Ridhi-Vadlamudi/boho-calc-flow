@@ -6,6 +6,10 @@ import { CalculatorHistory } from '@/components/CalculatorHistory';
 import { CalculatorMarketplace } from '@/components/CalculatorMarketplace';
 import { CalculatorRunner } from '@/components/CalculatorRunner';
 import { useState, useEffect } from 'react';
+import { Leaf, Flower2, TreePine, Sparkles, Heart, Moon, Sun } from 'lucide-react';
+import orangeFlowers from '@/assets/orange-flowers.jpg';
+import sunThroughTrees from '@/assets/sun-through-trees.jpg';
+import forestLight from '@/assets/forest-light.jpg';
 
 const Index = () => {
   const { user, signOut, loading } = useAuth();
@@ -50,20 +54,48 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-cream/20 to-sage/10 p-4">
-      {/* Decorative elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-terracotta/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-dusty-rose/10 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 right-1/3 w-24 h-24 bg-sage/10 rounded-full blur-2xl"></div>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-orange-50 to-yellow-50 relative overflow-hidden">
+      {/* Boho Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-10 left-10 opacity-20">
+          <img src={orangeFlowers} alt="" className="w-32 h-32 object-cover rounded-full" />
+        </div>
+        <div className="absolute top-20 right-20 opacity-15">
+          <img src={sunThroughTrees} alt="" className="w-24 h-24 object-cover rounded-full" />
+        </div>
+        <div className="absolute bottom-20 left-20 opacity-20">
+          <img src={forestLight} alt="" className="w-28 h-28 object-cover rounded-full" />
+        </div>
+        
+        {/* Floating Icons */}
+        <Leaf className="absolute top-32 left-1/4 text-green-300 opacity-30 w-8 h-8 animate-pulse" />
+        <Flower2 className="absolute top-40 right-1/3 text-orange-300 opacity-40 w-6 h-6 animate-pulse" />
+        <TreePine className="absolute bottom-32 right-1/4 text-green-400 opacity-30 w-10 h-10 animate-pulse" />
+        <Sparkles className="absolute top-1/2 left-16 text-yellow-300 opacity-40 w-5 h-5 animate-pulse" />
+        <Heart className="absolute bottom-40 right-16 text-pink-300 opacity-30 w-7 h-7 animate-pulse" />
+        <Moon className="absolute top-16 left-1/2 text-purple-300 opacity-30 w-6 h-6 animate-pulse" />
+        <Sun className="absolute bottom-16 left-1/3 text-yellow-400 opacity-35 w-8 h-8 animate-pulse" />
       </div>
 
-      <header className="relative max-w-7xl mx-auto mb-8 text-center">
-        <div className="bg-gradient-to-r from-card/80 to-background/80 backdrop-blur-sm rounded-2xl p-6 shadow-[var(--shadow-warm)] border border-border/30">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-terracotta to-dusty-rose bg-clip-text text-transparent mb-2">
-            BohoCalc
-          </h1>
-          <p className="text-muted-foreground mb-4">Your mindful calculation companion & community marketplace</p>
+      {/* Decorative elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-green-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-orange-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 right-1/3 w-24 h-24 bg-yellow-200/20 rounded-full blur-2xl"></div>
+      </div>
+
+      <header className="relative max-w-7xl mx-auto mb-8 text-center z-10 p-4">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-green-200/50">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Leaf className="text-green-500 w-8 h-8" />
+            <h1 className="text-4xl font-bold text-gray-800">BohoCalc</h1>
+            <Flower2 className="text-orange-400 w-8 h-8" />
+          </div>
+          <div className="flex items-center justify-center gap-2 text-gray-600 mb-4">
+            <TreePine className="w-5 h-5 text-green-400" />
+            <p className="text-lg">Your mindful calculation companion & community marketplace</p>
+            <Sparkles className="w-5 h-5 text-yellow-400" />
+          </div>
           
           {user ? (
             <div className="flex items-center justify-between">
@@ -100,7 +132,7 @@ const Index = () => {
                 onClick={() => setActiveTab('calculator')}
                 className="flex items-center gap-2"
               >
-                <span className="w-6 h-6 bg-gradient-to-r from-terracotta to-dusty-rose rounded-full flex items-center justify-center text-white text-xs">✦</span>
+                <Leaf className="w-5 h-5 text-green-500" />
                 Basic Calculator
               </Button>
               <Button
@@ -108,7 +140,7 @@ const Index = () => {
                 onClick={() => setActiveTab('marketplace')}
                 className="flex items-center gap-2"
               >
-                <span className="w-6 h-6 bg-gradient-to-r from-sage to-golden rounded-full flex items-center justify-center text-white text-xs">⚡</span>
+                <TreePine className="w-5 h-5 text-green-600" />
                 Marketplace
               </Button>
               {user && (
@@ -117,7 +149,7 @@ const Index = () => {
                   onClick={() => setActiveTab('history')}
                   className="flex items-center gap-2"
                 >
-                  <span className="w-6 h-6 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center text-white text-xs">✧</span>
+                  <Flower2 className="w-5 h-5 text-orange-500" />
                   History
                 </Button>
               )}
@@ -126,7 +158,7 @@ const Index = () => {
         </div>
       </div>
 
-      <main className="relative max-w-7xl mx-auto">
+      <main className="relative max-w-7xl mx-auto z-10 px-4">
         {selectedCalculator ? (
           <CalculatorRunner 
             calculator={selectedCalculator} 
@@ -140,7 +172,7 @@ const Index = () => {
                   <h2 className="text-2xl font-semibold text-foreground mb-2">Basic Calculator</h2>
                   <p className="text-muted-foreground text-sm">Perform simple calculations</p>
                 </div>
-                <div className="bg-white/50 p-4 rounded-xl border">
+                <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl border border-green-200/50 shadow-lg">
                   <Calculator onSaveCalculation={handleSaveCalculation} />
                 </div>
               </div>
