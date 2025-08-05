@@ -88,19 +88,19 @@ const Index = () => {
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-green-200/50">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Leaf className="text-green-500 w-8 h-8" />
-            <h1 className="text-4xl font-bold text-gray-800">BohoCalc</h1>
+            <h1 className="text-4xl font-bold text-foreground">BohoCalc</h1>
             <Flower2 className="text-orange-400 w-8 h-8" />
           </div>
-          <div className="flex items-center justify-center gap-2 text-gray-600 mb-4">
+          <div className="flex items-center justify-center gap-2 text-foreground mb-4">
             <TreePine className="w-5 h-5 text-green-400" />
-            <p className="text-lg">Your mindful calculation companion & community marketplace</p>
+            <p className="text-lg font-medium">Your mindful calculation companion & community marketplace</p>
             <Sparkles className="w-5 h-5 text-yellow-400" />
           </div>
           
           {user ? (
             <div className="flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">
-                Welcome back, <span className="font-medium text-foreground">{user.email}</span>
+              <p className="text-sm text-foreground font-medium">
+                Welcome back, <span className="font-semibold text-primary">{user.email}</span>
               </p>
               <Button onClick={signOut} variant="outline" className="border-primary/30 hover:bg-primary/10">
                 Sign Out
@@ -108,7 +108,7 @@ const Index = () => {
             </div>
           ) : (
             <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-foreground font-medium mb-4">
                 Browse calculators as a guest, or sign in to create and save your own!
               </p>
               <Button 
@@ -170,7 +170,7 @@ const Index = () => {
               <div className="max-w-md mx-auto">
                 <div className="text-center mb-6">
                   <h2 className="text-2xl font-semibold text-foreground mb-2">Basic Calculator</h2>
-                  <p className="text-muted-foreground text-sm">Perform simple calculations</p>
+                  <p className="text-foreground text-sm font-medium">Perform simple calculations</p>
                 </div>
                 <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl border border-green-200/50 shadow-lg">
                   <Calculator onSaveCalculation={handleSaveCalculation} />
@@ -188,7 +188,7 @@ const Index = () => {
               <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-6">
                   <h2 className="text-2xl font-semibold text-foreground mb-2">Calculation History</h2>
-                  <p className="text-muted-foreground text-sm">Track and organize your calculations</p>
+                  <p className="text-foreground text-sm font-medium">Track and organize your calculations</p>
                 </div>
                 <CalculatorHistory 
                   onCalculationSave={() => {}} 
