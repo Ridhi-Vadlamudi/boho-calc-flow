@@ -113,8 +113,8 @@ const Index = () => {
               </p>
               <Button 
                 onClick={() => window.location.href = '/auth'} 
-                className="bg-gradient-to-r from-terracotta to-dusty-rose hover:from-terracotta/90 hover:to-dusty-rose/90 text-white font-bold shadow-lg"
-                style={{ color: '#ffffff' }}
+                className="bg-white border-2 border-terracotta hover:bg-gray-50 text-black font-bold shadow-lg"
+                style={{ color: '#000000' }}
               >
                 Sign In / Sign Up
               </Button>
