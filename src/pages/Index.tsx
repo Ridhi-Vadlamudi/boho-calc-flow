@@ -133,7 +133,6 @@ const Index = () => {
                 onClick={() => setActiveTab('calculator')}
                 className="flex items-center gap-2"
               >
-                <Leaf className="w-5 h-5 text-green-500" />
                 Basic Calculator
               </Button>
               <Button
