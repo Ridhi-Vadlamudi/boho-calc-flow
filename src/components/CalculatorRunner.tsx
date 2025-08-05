@@ -72,7 +72,7 @@ export const CalculatorRunner = ({ calculator, onBack }: CalculatorRunnerProps) 
       });
 
       const calculatedResult = evaluate(formula);
-      setResult(calculatedResult.toString());
+      setResult(Number(calculatedResult).toFixed(2));
       
       // Record usage
       recordUsage(calculatedResult.toString());
