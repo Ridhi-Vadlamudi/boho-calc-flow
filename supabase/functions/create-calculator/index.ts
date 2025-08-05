@@ -115,19 +115,25 @@ Example for compound interest:
     // Try to extract JSON from the response
     let calculatorData;
     try {
+      console.log('Generated content:', generatedContent);
+      
       // Look for JSON in the response
       const jsonMatch = generatedContent.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
+        console.log('Found JSON match:', jsonMatch[0]);
         calculatorData = JSON.parse(jsonMatch[0]);
+        console.log('Parsed calculator data:', calculatorData);
       } else {
+        console.error('No JSON found in response');
         throw new Error('No JSON found in response');
       }
     } catch (parseError) {
       console.error('Failed to parse AI response:', parseError);
       console.error('Raw response:', generatedContent);
       return new Response(JSON.stringify({ 
-        error: 'Failed to parse AI response',
-        rawResponse: generatedContent 
+        error: 'Failed to parse AI response. The AI did not return valid JSON.',
+        rawResponse: generatedContent,
+        details: parseError.message
       }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
