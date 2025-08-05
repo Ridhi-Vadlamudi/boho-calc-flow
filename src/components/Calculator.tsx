@@ -97,7 +97,7 @@ export const Calculator = ({ onSaveCalculation }: CalculatorProps) => {
 
   const buttons = [
     { label: 'C', action: clear, className: 'col-span-2 bg-destructive hover:bg-destructive/90 text-destructive-foreground' },
-    { label: '⌫', action: () => setDisplay(display.slice(0, -1) || '0'), className: 'bg-muted hover:bg-muted/90' },
+    { label: '⌫', action: () => setDisplay(display.slice(0, -1) || '0'), className: 'bg-muted hover:bg-muted/90 text-foreground' },
     { label: '÷', action: () => inputOperation('÷'), className: 'bg-primary hover:bg-primary/90 text-primary-foreground' },
     
     { label: '7', action: () => inputNumber('7'), className: 'bg-card hover:bg-muted text-foreground' },
