@@ -113,7 +113,7 @@ const Index = () => {
               </p>
               <Button 
                 onClick={() => window.location.href = '/auth'} 
-                className="bg-gradient-to-r from-terracotta to-dusty-rose hover:from-terracotta/90 hover:to-dusty-rose/90"
+                className="bg-gradient-to-r from-terracotta to-dusty-rose hover:from-terracotta/90 hover:to-dusty-rose/90 text-white font-semibold"
               >
                 Sign In / Sign Up
               </Button>
