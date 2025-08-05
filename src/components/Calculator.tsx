@@ -123,20 +123,10 @@ export const Calculator = ({ onSaveCalculation }: CalculatorProps) => {
   return (
     <div className="space-y-4">
       <Card className="w-full max-w-sm mx-auto shadow-lg bg-white/90 backdrop-blur-sm border-2 border-green-200/50 relative overflow-hidden">
-        {/* Decorative corner elements */}
-        <div className="absolute top-2 left-2">
-          <Leaf className="w-4 h-4 text-green-300 opacity-60" />
-        </div>
-        <div className="absolute top-2 right-2">
-          <Flower className="w-4 h-4 text-orange-300 opacity-60" />
-        </div>
         
         <CardContent className="p-6 space-y-4">
           {/* Display */}
-          <div className="bg-gradient-to-r from-green-50 to-orange-50 rounded-xl p-4 min-h-[80px] flex items-center justify-end border border-green-200/30 relative">
-            <div className="absolute top-1 right-1">
-              <Leaf className="w-3 h-3 text-green-400 opacity-40" />
-            </div>
+          <div className="bg-gradient-to-r from-green-50 to-orange-50 rounded-xl p-4 min-h-[80px] flex items-center justify-end border border-green-200/30">
             <span className="text-2xl font-mono font-bold text-right break-all text-gray-800">
               {display}
             </span>
@@ -167,7 +157,6 @@ export const Calculator = ({ onSaveCalculation }: CalculatorProps) => {
           >
             <Save className="w-4 h-4" />
             Save Calculation
-            <Flower className="w-4 h-4 text-orange-400" />
           </Button>
         </div>
       )}
