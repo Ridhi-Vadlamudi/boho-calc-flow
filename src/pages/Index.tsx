@@ -63,9 +63,6 @@ const Index = () => {
         <div className="absolute top-20 right-20 opacity-15">
           <img src={sunThroughTrees} alt="" className="w-24 h-24 object-cover rounded-full" />
         </div>
-        <div className="absolute bottom-20 left-20 opacity-20">
-          <img src={forestLight} alt="" className="w-28 h-28 object-cover rounded-full" />
-        </div>
         
         {/* Floating Icons */}
         <Leaf className="absolute top-32 left-1/4 text-green-300 opacity-30 w-8 h-8 animate-pulse" />
