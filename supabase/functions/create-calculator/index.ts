@@ -55,6 +55,19 @@ Example for compound interest:
   "category": "Finance"
 }`;
 
+    console.log('Making OpenAI API request with prompt:', prompt);
+    
+    if (!openAIApiKey) {
+      console.error('OpenAI API key is missing');
+      return new Response(JSON.stringify({ 
+        error: 'OpenAI API key not configured',
+        details: 'Please set the OPENAI_API_KEY in Supabase secrets'
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -71,7 +84,9 @@ Example for compound interest:
       }),
     });
 
+    console.log('OpenAI API response status:', response.status);
     const data = await response.json();
+    console.log('OpenAI API response data:', JSON.stringify(data, null, 2));
     
     if (!response.ok) {
       console.error('OpenAI API error:', data);
