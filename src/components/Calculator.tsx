@@ -100,23 +100,23 @@ export const Calculator = ({ onSaveCalculation }: CalculatorProps) => {
     { label: '⌫', action: () => setDisplay(display.slice(0, -1) || '0'), className: 'bg-muted hover:bg-muted/90' },
     { label: '÷', action: () => inputOperation('÷'), className: 'bg-primary hover:bg-primary/90 text-primary-foreground' },
     
-    { label: '7', action: () => inputNumber('7'), className: 'bg-card hover:bg-muted' },
-    { label: '8', action: () => inputNumber('8'), className: 'bg-card hover:bg-muted' },
-    { label: '9', action: () => inputNumber('9'), className: 'bg-card hover:bg-muted' },
+    { label: '7', action: () => inputNumber('7'), className: 'bg-card hover:bg-muted text-foreground' },
+    { label: '8', action: () => inputNumber('8'), className: 'bg-card hover:bg-muted text-foreground' },
+    { label: '9', action: () => inputNumber('9'), className: 'bg-card hover:bg-muted text-foreground' },
     { label: '×', action: () => inputOperation('×'), className: 'bg-primary hover:bg-primary/90 text-primary-foreground' },
     
-    { label: '4', action: () => inputNumber('4'), className: 'bg-card hover:bg-muted' },
-    { label: '5', action: () => inputNumber('5'), className: 'bg-card hover:bg-muted' },
-    { label: '6', action: () => inputNumber('6'), className: 'bg-card hover:bg-muted' },
+    { label: '4', action: () => inputNumber('4'), className: 'bg-card hover:bg-muted text-foreground' },
+    { label: '5', action: () => inputNumber('5'), className: 'bg-card hover:bg-muted text-foreground' },
+    { label: '6', action: () => inputNumber('6'), className: 'bg-card hover:bg-muted text-foreground' },
     { label: '-', action: () => inputOperation('-'), className: 'bg-primary hover:bg-primary/90 text-primary-foreground' },
     
-    { label: '1', action: () => inputNumber('1'), className: 'bg-card hover:bg-muted' },
-    { label: '2', action: () => inputNumber('2'), className: 'bg-card hover:bg-muted' },
-    { label: '3', action: () => inputNumber('3'), className: 'bg-card hover:bg-muted' },
+    { label: '1', action: () => inputNumber('1'), className: 'bg-card hover:bg-muted text-foreground' },
+    { label: '2', action: () => inputNumber('2'), className: 'bg-card hover:bg-muted text-foreground' },
+    { label: '3', action: () => inputNumber('3'), className: 'bg-card hover:bg-muted text-foreground' },
     { label: '+', action: () => inputOperation('+'), className: 'bg-primary hover:bg-primary/90 text-primary-foreground' },
     
-    { label: '0', action: () => inputNumber('0'), className: 'col-span-2 bg-card hover:bg-muted' },
-    { label: '.', action: inputDecimal, className: 'bg-card hover:bg-muted' },
+    { label: '0', action: () => inputNumber('0'), className: 'col-span-2 bg-card hover:bg-muted text-foreground' },
+    { label: '.', action: inputDecimal, className: 'bg-card hover:bg-muted text-foreground' },
     { label: '=', action: calculate, className: 'bg-accent hover:bg-accent/90 text-accent-foreground' },
   ];
 
